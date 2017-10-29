@@ -1,0 +1,897 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Kotlin & Android</title>
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/github.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<style>
+		.bold {
+			font-weight: bolder !important;
+			color: #FFF;
+		}
+
+		.opening {
+			position: relative;
+			top: -200px;
+			left: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-background-transition="fade">
+
+				<section data-background="images/android_kotlin.png">
+					<h3 class="opening"> Kotlin & Android</h3>
+				</section>
+				<section>
+					<h2>
+						Agenda
+					</h2>
+					<ul>
+						<li>
+							Introduction
+						</li>
+						<li>
+							Language basics
+						</li>
+						<li>
+							Advanced features
+						</li>
+						<li>
+							Kotlin in Android
+						</li>
+						<li>
+							Problems
+						</li>
+					</ul>
+				</section>
+			</section>
+
+			<section data-background-transition="fade" data-background="#FFD4F1">
+				<section data-background-transition="fade" data-background="#c47eb6">
+					<h2>Introduction</h2>
+				</section>
+				<section>
+					<h2>
+						Kotlin is
+					</h2>
+					<ul>
+						<li>
+							Statically typed general purpose programming language
+						</li>
+						<li>
+							Multi-paradigm: procedural, objective, functional
+						</li>
+						<li>
+							Runs on JVM, Android, Browser, Native
+						</li>
+						<li>
+							100% interopable with Java and Java Libraries and produces same bytecode as Java
+						</li>
+						<li>
+							Can be used in legacy systems Java 6+
+						</li>
+						<li>
+							Created by JetBrains
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h2>What Kotlin has that Java does not</h2>
+					<table style="font-size: 25px;">
+						<tr>
+							<td>
+								<ul>
+									<li>
+										Lambda expressions + Inline functions
+									</li>
+									<li>
+										Extension functions
+									</li>
+									<li>
+										Null-safety
+									</li>
+									<li>
+										Smart casts
+									</li>
+									<li>
+										String templates
+									</li>
+									<li>
+										Properties
+									</li>
+									<li>
+										Primary constructors
+									</li>
+									<li>
+										First-class delegation
+									</li>
+								</ul>
+							</td>
+							<td>
+								<ul>
+									<li>
+										Data classes
+									</li>
+									<li>
+										Type inference for variable and property types
+									</li>
+									<li>
+										Declaration-site variance & Type projections</li>
+									<li>
+										Range expressions
+									</li>
+									<li>
+										Operator overloading
+									</li>
+									<li>
+										Companion objects
+									</li>
+									<li>
+										Separate interfaces for read-only and mutable collections
+									</li>
+									<li>
+										Coroutines
+									</li>
+								</ul>
+							</td>
+						</tr>
+					</table>
+				</section>
+			</section>
+			<section data-background-transition="fade" data-background="#C8EDFF">
+				<section data-background-transition="fade" data-background="#87bae1">
+					<h2>Language syntax</h2>
+				</section>
+				<section>
+					<h2>
+						Functons
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+fun sum(a: Int, b: Int): Int {
+    return a + b
+}
+					</code></pre>
+
+					<pre><code class="hljs" data-trim contenteditable>
+fun sum(a: Int, b: Int) = a + b
+					</code></pre>
+
+					<pre><code class="hljs" data-trim contenteditable>
+fun main(args : String) {
+   println("Hello world!")
+}
+					</code></pre>
+				</section>
+
+
+				<section>
+					<h2>
+						Functons features
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+fun configure(min: Int = 5, max: Int = 10) {
+	/* function with default arguments */
+}
+// call
+configure(max= 20)
+
+					</code></pre>
+
+					<pre><code class="hljs" data-trim contenteditable>
+fun concatStrings(vararg values: String): String {
+	/* values is collection of strings */
+}
+					</code></pre>
+				</section>
+				<section>
+					<h2>
+						Defining local variable
+					</h2>
+					Assign-once (read-only) local variable:
+					<pre><code class="hljs" data-trim contenteditable>
+val a: Int = 1  // immediate assignment
+val b = 2   // `Int` type is inferred
+val c: Int  // Type required when no initializer is provided
+c = 3       // deferred assignment
+					</code></pre> Mutable variable:
+					<pre><code class="hljs" data-trim contenteditable>
+var x = 5 // `Int` type is inferred
+x += 1
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Using string templates
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+// c# 6
+var a = 1
+val s1 = "a is $a"
+val s2 = "s1 length = ${s1.length}"
+					</code></pre>
+				</section>
+
+
+
+				<section>
+					<h2>
+						Null safety
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+fun printComputationResult(x: Int?, y: Int?) {
+    // compiler requires null checks to use nullable values
+    if (x != null && y != null) {
+    // automatically cast to non-nullable after null check
+        println(x * y)
+    }
+}
+val size: Int? = files?.size // get size value or assign null
+this.file?.dispose() // call dispose if file is not null
+this.file!!.save() // we are sure file is not null
+val size: Int = file?.size ?: 0 // get size value or assign 0
+					</code></pre> Nullable reference types c# 8
+				</section>
+
+				<section>
+					<h2>
+						Smart Cast
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+fun demo(x: Any) {
+    if (x is String) {
+        print(x.length) // x is automatically cast to String
+    }
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Using conditional expressions
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+fun maxOf(a: Int, b: Int): Int {
+    if (a > b) {
+        return a
+    } else {
+        return b
+    }
+}
+					</code></pre> if expression ( ? : ; in c# )
+					<pre><code class="hljs" data-trim contenteditable>
+fun maxOf(a: Int, b: Int) = if (a > b) a else b
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						For loops
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>for (item in collection) print(item)
+
+for (item: Int in ints) {
+    // ...
+}
+
+for (i in array.indices) {
+    print(array[i])
+}
+
+for ((index, value) in array.withIndex()) {
+    println("the element at $index is $value")
+}
+					</code></pre>
+				</section>
+				<section>
+					<h2>
+						While loops
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+while (x > 0) {
+    x--
+}
+
+do {
+    val y = retrieveData()
+} while (y != null) // y is visible here!
+					</code></pre>
+				</section>
+				<section>
+					<h2>
+						Ranges
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>// iterate through ranges
+for (x in 1..5) { print(x) }
+for (x in 1..10 step 2)  { print(x) }
+for (x in 9 downTo 0 step 3)  { print(x) }
+
+// Check if a number is in or out of range:
+if (x in 1..y+1) {
+	println("fits in range")
+}
+if (-1 !in 0..list.lastIndex) {
+	println("-1 is out of range")
+}</code></pre>
+				</section>
+				<section>
+					<h2>
+						When Expression
+					</h2>
+					(Switch with pattern matching c# 7)
+					<pre><code class="hljs" data-trim contenteditable>
+fun describe(obj: Any): String =
+when (obj) {
+    1          -> "One"
+    2,3,4      -> "More than one less than 5"
+    5..10      -> "Is in range"
+    "Hello"    -> "Greeting"
+    is Long    -> "Long"
+    !is String -> "Not a string"
+    else       -> "Unknown"
+}				</code></pre>
+				</section>
+
+
+
+				<section>
+					<h2> Exception handling</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+try {
+    throw MyException("Hi There!")
+}
+catch (e: SomeException) {
+    // handler
+}
+finally {
+    // optional finally block
+}
+					</code></pre> no java checked exceptions
+				</section>
+
+				<section>
+					<h2>
+						Classes
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>// class with default consstructor
+class Human { }
+// class with primary constructor
+class Person(val firstName: String, var lastName: String) { } 
+// class with primary constructor
+class Customer(val login: String) {
+    init { 
+	// initializer
+    }
+    constructor(login: String, val email: String): this(login) {
+	//secondary constructor
+    }
+}</code></pre>
+					<pre><code class="hljs" data-trim contenteditable>val human = Human()
+val customer1 = Customer("Smith89")
+val customer2 = Customer("Smith89", "Joe")</code></pre>
+				</section>
+				<section>
+					<h2>
+						Interfaces
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+interface FooBarInterface {
+	fun bar()
+	fun foo() {
+		// Default Interface Implementations (c# 8)
+	}
+}
+
+</code></pre>
+				</section>
+
+
+				<section>
+					<h2>
+						Inheritance
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>abstract class Controller {
+    abstract fun init()
+}
+open class BaseController: Controller() {
+    override fun init()  { /* ... */ }
+    open fun onActivated { /* ... */ }
+}
+interface NavigationAware {
+    fun navigateTo(destination: String)
+}
+class DashboardController : BaseController(), NavigationAware {
+    override fun onActivated() { /* ... */ }
+    overrider fun navigateTo(destination: String)  { /* ... */ }
+}</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Member functions
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+open class Foo {
+    open fun foo(i: Int = 10) { ... }
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Properties
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>class Test {
+private val privateProperty: String = "Private"
+
+var propertyWithCustomAccessors: String
+	get() = this.toString()
+	set(value) {
+		// do something
+	}
+
+var propertyWithInitialiserAndBackingField = 0 
+	set(value) {
+		if (value >= 0) field = value
+	}
+}</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Class & members features
+					</h2>
+					<ul>
+						<li>Classess and members are sealed by default unless marked as abstract or open</li>
+						<li>Members are public by default unless marked as internal, protected, private</li>
+						<li>No static members</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>
+						Data classes
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+//c# 8 records
+data class User(val name: String, val age: Int)
+						</code></pre> The compiler automatically creates:
+					<ul>
+						<li>equals()/hashCode()</li>
+						<li>toString()</li>
+						<li>componentN()</li>
+						<li>copy()</li>
+					</ul>
+				</section>
+			</section>
+
+			<section data-background-transition="fade" data-background="#FFE3CE">
+				<section data-background-transition="fade" data-background="#e1a172">
+					<h2>
+						Advanced features
+					</h2>
+				</section>
+				<section>
+					<h2>
+						Extension Properties
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>// extension everything c# 8
+val Person.fullName: String
+	get() = "$firstName $lastName"
+
+
+val person = Person("John", "Smith")
+print(person.fullName)
+							</code></pre>
+				</section>
+				<section>
+					<h2>
+						Extensions methods
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+// c# 3.5
+fun Number.percentOf(number: Number): Number{
+	if (number == 0){
+		return 0
+	}
+
+	return this.toDouble() / number.toDouble() * 100
+}
+
+val percents = 10.percentOf(100)
+						</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Infix methods
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+infix fun Number.percentOf(number: Number): Number{
+	if (number == 0){
+		return 0
+	}
+
+	return this.toDouble() / number.toDouble() * 100
+}
+
+val percents = 10 percentOf 100
+							</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Delegated properties: Lazy
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+class HeavyObject
+class HeavyObjectProvider{
+	val instance: HeavyObject by lazy {
+		HeavyObject()
+	}
+}
+								</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Delegated properties: map
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>// c# 8
+interface Field { 
+	fun validate(): String 
+}
+class EmailField: Field{ 
+	override fun validate(): String = "" 
+}
+
+abstract class Form {
+	protected val properties: MutableMap<String, Field> = mutableMapOf()
+
+	fun validate(): Collection<String> {
+		val errors = arrayListOf<String>()
+		for (field in properties) {
+			errors.add(field.value.validate())
+		}
+		return errors
+	}
+}
+
+class OrderForm: Form() {
+	var email: EmailField by properties
+	init {
+		email = EmailField()
+	}
+}</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Class Delegation
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>interface View { }
+interface ThirdPartyView { }
+
+class ViewDecorator (view: View): View by view, ThirdPartyView { }
+class OrderView: View{ }
+
+val orderView = OrderView()
+val decorator = ViewDecorator(orderView)</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Object
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+abstract class Event
+object EventBus {
+    fun publish(event: Event){ }
+    fun subscribe(channel: String): Observable<Event> { /* ... */ }
+}
+
+EventBus.publish(TestEvent())
+
+</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Companion Object
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+class TestEvent : Event() {
+	companion object {
+		const val channel = "test"
+	}
+}
+val observable = EventBus.subscribe(TestEvent.channel)
+
+</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Lambdas
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+//no parameters lambda
+defer { notify() }
+
+//lambda with parameters
+max(strings, { a, b -> a.length < b.length })
+
+//it: implicit name of a single parameter
+strings
+.filter { it.length == 5 }
+.sortBy { it }
+.map { it.toUpperCase() }
+			</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Higher-Order Functions
+					</h2>
+					A higher-order function is a function that takes functions as parameters, or returns a function
+					<pre><code class="hljs" data-trim contenteditable>fun lock(lock: Lock, body: () -> Unit): Unit {
+	lock.lock()
+	try {
+		return body()
+	}
+	finally {
+		lock.unlock()
+	}
+}</code></pre>
+
+					<pre><code class="hljs" data-trim contenteditable>fun toBeSynchronized() = sharedResource.operation()
+val result = lock(lock, { sharedResource.operation() })</code></pre>
+				</section>
+				<section>
+					<h2>
+						Collections lambda expressions
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+fruits
+.filter { it.startsWith("a") }
+.sortedBy { it }
+.map { it.toUpperCase() }
+.forEach { println(it) }
+							</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Closures
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+var sum = 0
+ints.filter { it > 0 }.forEach {
+	sum += it
+}
+print(sum)
+						</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Inline
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>inline fun lock<T>(lock: Lock, body: () -> T): T {
+	// ...
+}</code></pre>
+					<pre><code class="hljs" data-trim contenteditable>lock(l) { foo() }</code></pre>
+					<pre><code class="hljs" data-trim contenteditable>l.lock()
+try {
+	foo()
+}
+finally {
+	l.unlock()
+}</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Lambda receivers
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>class ODataConfiguration{
+	var host = ""
+	var apiVersion = 0
+	var tenant = ""
+}
+class ODataConnection {
+    private val configuration = ODataConfiguration()
+    fun configure(initialize: ODataConfiguration.() -> Unit) { 
+		configuration.initialize() 
+    }
+}
+
+val odata = ODataConnection()
+
+odata.configure {
+	host = "api.contoso.com"
+	apiVersion = 3
+	tenant = "foo"
+}</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						DSL
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>val q = ODataQuery(
+	top = 10,
+	skip = 1,
+	select = ODataSelect("Id","Description"),
+	expand = ODataExpand("Permission","Documents"),
+	filter = ODataFilter{
+		group { ("IsRepeating" isEqualTo true) and ("RepeatType" isGreaterThan 1) } and ("Notes" isNotEqualTo null)
+	}
+)
+
+val expectedEncoded = "%24select=Id%2CDescription&%24expand=Permission%2CDocuments&%24filter=(IsRepeating%20eq%20True%20and%20RepeatType%20gt%201)%20and%20Notes%20ne%20null&%24top=10&%24skip=1"</code></pre>
+				</section>
+
+				<section>
+					<h2>
+						Generic types
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+abstract class Entity
+abstract class EntityQuery&lt;out TEntity&gt; where TEntity: Entity {
+	abstract fun execute(): Collection&lt;TEntity&gt;
+}
+abstract class EntityCommand&lt;in TEntity&gt; where TEntity: Entity {
+	abstract fun execute(entity: TEntity)
+}
+fun &lt;T&gt; emptyCollection(): Collection&lt;T&gt;{
+	return arrayListOf&lt;T&gt;()
+}
+inline fun &lt;reified T&gt; getTypeName(): String{
+	return T::class.java.simpleName
+}	</code></pre>
+				</section>
+			</section>
+
+
+			<section data-background-transition="fade" data-background="#D5FFC5">
+
+				<section data-background-transition="fade" data-background="#77bf5a">
+					<h2>
+						Kotlin in Android
+					</h2>
+				</section>
+				<section>
+					<h2>
+						Why Kotlin?
+					</h2>
+					<ul>
+						<li>Interopable with existing code and libraries</li>
+						<li>Small size impact 7,000 methods and ~1MB</li>
+						<li>Official Android programming langugage</li>
+						<li>Tooling & extensions made by JetBrains</li>
+					</ul>
+				</section>
+				<section>
+					<h2>
+						Android Studio 3
+					</h2>
+					<ul>
+						<li>Gradle v3</li>
+						<li>Instant run</li>
+						<li>Emulator snapshots</li>
+						<li>Automatic Java to Kotlin translation</li>
+					</ul>
+				</section>
+				<section>
+					<h2>
+						New project
+					</h2>
+					<img src="images/project-create.png" />
+				</section>
+				<section>
+					<h2>
+						Demos
+					</h2>
+				</section>
+			</section>
+			<section data-background-transition="fade" data-background="#E9DDFF">
+				<section data-background-transition="fade" data-background="#a693ed">
+					<h2>Problems</h2>
+				</section>
+				<section>
+					<h2>Code generating libraries</h2>
+					<ul>
+						<li>GreenDao is not working</li>
+						<li>Hard to debug generation errors</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Leak canary</h2>
+					<p>
+						Currently not working with Gradle 3
+					</p>
+				</section>
+				<section>
+					<h2>Compilation time</h2>
+					<ul>
+						<li>Average build time 1.30 minutes</li>
+						<li>Inlining increase build time</li>
+					</ul>
+				</section>
+				<section>
+					<img src="images/kotlin.jpg" />
+				</section>
+			</section>
+			<section data-background-transition="fade" data-background="#FFF">
+				<section>
+					<h2>More info</h2>
+					<p>
+						<a href="https://kotlinlang.org">kotlinlang.org</a>
+					</p>
+				</section>
+				<section>
+					<h2>This presentation</h2>
+					<p>
+						<a href="https://github.com/raflop/kotlin-android-presentation">https://github.com/raflop/kotlin-android-presentation</a>
+					</p>
+					<img src="images/qr.png" />
+				</section>
+			</section>
+			
+		</div>
+	</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
+
+	<script>
+		// More info about config & dependencies:
+		// - https://github.com/hakimel/reveal.js#configuration
+		// - https://github.com/hakimel/reveal.js#dependencies
+		Reveal.initialize({
+			dependencies: [{
+					src: 'plugin/markdown/marked.js'
+				},
+				{
+					src: 'plugin/markdown/markdown.js'
+				},
+				{
+					src: 'plugin/notes/notes.js',
+					async: true
+				},
+				{
+					src: 'plugin/highlight/highlight.pack.js',
+					async: true,
+					callback: function () {
+						hljs.initHighlightingOnLoad();
+					}
+				}
+			]
+		});
+	</script>
+</body>
+
+</html>

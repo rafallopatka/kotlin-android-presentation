@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">KotlinSamples</string>
+    <string name="TxtTest">Text changed in code</string>
 </resources>

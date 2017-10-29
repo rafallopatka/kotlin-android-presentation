@@ -10,6 +10,7 @@ import android.widget.Toast
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,14 +38,15 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        // rx java state management
         val service = SampleDataService()
-
         val loadDataObservable = service
                 .callSlowService()
                 .map { if (it.isFailure) LoadingState.Failure else LoadingState.Success }
                 .startWith(LoadingState.Loading)
+                .onErrorReturn{ LoadingState.Failure }
 
-        val subscribtion = btnTogle
+        val sampleSubscription = btnTogle
                 .clickObservable()
                 .switchMap { loadDataObservable }
                 .observeOn(AndroidSchedulers.mainThread())
@@ -76,7 +78,21 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
-        disposables.addAll(subscribtion)
+        disposables.addAll(sampleSubscription)
+
+        // retrofit service call
+        val peopleService = PeopleService()
+        val restSubscription = btnRest
+                .clickObservable()
+                .observeOn(Schedulers.io())
+                .switchMap { peopleService.getPersonalInfo("russellwhyte") }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    val toast = Toast.makeText(this, it.firstName, Toast.LENGTH_SHORT)
+                    toast.show()
+                }
+
+        disposables.add(restSubscription)
     }
 
     override fun onDestroy() {

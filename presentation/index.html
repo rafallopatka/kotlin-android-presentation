@@ -885,6 +885,30 @@ inline fun &lt;reified T&gt; getTypeName(): String{
 						<li>Service</li>
 					</ul>
 				</section>
+				<section>
+					<h2>
+						Database access
+					</h2>
+					<ul>
+						<li>DbFlow</li>
+						<li>ObjectBox</li>
+						<li>Anko.SQLite</li>
+						<li>Room</li>
+						<li>Realm</li>
+						<li>SQLite</li>
+
+					</ul>
+				</section>
+
+				<section>
+						<h2>
+							Demo SQLite extensions
+						</h2>
+						<ul>
+							<li>Cursor extensions</li>
+							<li>Content values extensions</li>
+						</ul>
+					</section>
 			</section>
 			<section data-background-transition="fade" data-background="#E9DDFF">
 				<section data-background-transition="fade" data-background="#a693ed">
@@ -929,7 +953,7 @@ inline fun &lt;reified T&gt; getTypeName(): String{
 					<img src="images/qr.png" />
 				</section>
 			</section>
-			
+
 		</div>
 	</div>
 
@@ -942,22 +966,22 @@ inline fun &lt;reified T&gt; getTypeName(): String{
 		// - https://github.com/hakimel/reveal.js#dependencies
 		Reveal.initialize({
 			dependencies: [{
-					src: 'plugin/markdown/marked.js'
-				},
-				{
-					src: 'plugin/markdown/markdown.js'
-				},
-				{
-					src: 'plugin/notes/notes.js',
-					async: true
-				},
-				{
-					src: 'plugin/highlight/highlight.pack.js',
-					async: true,
-					callback: function () {
-						hljs.initHighlightingOnLoad();
-					}
+				src: 'plugin/markdown/marked.js'
+			},
+			{
+				src: 'plugin/markdown/markdown.js'
+			},
+			{
+				src: 'plugin/notes/notes.js',
+				async: true
+			},
+			{
+				src: 'plugin/highlight/highlight.pack.js',
+				async: true,
+				callback: function () {
+					hljs.initHighlightingOnLoad();
 				}
+			}
 			]
 		});
 	</script>

@@ -4,11 +4,17 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 import android.R.attr.duration
+import android.opengl.Visibility
+import android.view.View
 import android.widget.Toast
-
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 
 
 class MainActivity : AppCompatActivity() {
+
+    val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,5 +35,69 @@ class MainActivity : AppCompatActivity() {
             val dialog = JavaDialog()
             dialog.show(this)
         }
+
+
+        val service = SampleDataService()
+
+        val loadDataObservable = service
+                .callSlowService()
+                .map { if (it.isFailure) LoadingState.Failure else LoadingState.Success }
+                .startWith(LoadingState.Loading)
+
+        val subscribtion = btnTogle
+                .clickObservable()
+                .switchMap { loadDataObservable }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    when(it){
+                        LoadingState.NotStarted -> {
+                            this.btnTogle.isEnabled = true
+                            this.pgrLoading.visibility = View.GONE
+                        }
+                        LoadingState.Loading -> {
+                            this.btnTogle.isEnabled = false
+                            this.pgrLoading.visibility = View.VISIBLE
+                        }
+                        LoadingState.Success -> {
+                            this.btnTogle.isEnabled = true
+                            this.pgrLoading.visibility = View.GONE
+
+                            val toast = Toast.makeText(this, "Success", Toast.LENGTH_SHORT)
+                            toast.show()
+                        }
+                        LoadingState.Failure -> {
+                            this.btnTogle.isEnabled = true
+                            this.pgrLoading.visibility = View.GONE
+
+                            val toast = Toast.makeText(this, "Error", Toast.LENGTH_SHORT)
+                            toast.show()
+                        }
+                    }
+
+                }
+
+        disposables.addAll(subscribtion)
     }
+
+    override fun onDestroy() {
+        disposables.dispose()
+        super.onDestroy()
+    }
+}
+
+fun View.clickObservable(): Observable<Unit> {
+    return Observable.create {
+        val stream = it
+        this.setOnClickListener {
+            stream.onNext(Unit)
+        }
+    }
+}
+
+
+enum class LoadingState {
+    NotStarted,
+    Loading,
+    Success,
+    Failure
 }

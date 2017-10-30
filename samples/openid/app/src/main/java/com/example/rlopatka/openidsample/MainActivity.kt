@@ -37,13 +37,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun authorize(cfg: AuthorizationServiceConfiguration) {
-        val clientId = "USE_YOUR_OWN"
-
-
+        val clientId = "USE_YOUR_OWN_INSTANCE"
         val redirectUrl = Uri.parse("com.github.raflop.kotlin-android-presentation://openidredirect")
         val request = AuthorizationRequest
                 .Builder(cfg, clientId, ResponseTypeValues.CODE, redirectUrl)
-                .setScopes(AuthorizationRequest.Scope.OPENID, AuthorizationRequest.Scope.PROFILE, "read:users")
+                .setScopes(
+                        AuthorizationRequest.Scope.OPENID,
+                        AuthorizationRequest.Scope.PROFILE,
+                        AuthorizationRequest.Scope.OFFLINE_ACCESS,
+                        AuthorizationRequest.Scope.EMAIL)
                 .build()
 
         val authService = AuthorizationService(this)

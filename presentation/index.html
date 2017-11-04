@@ -631,7 +631,25 @@ val observable = EventBus.subscribe(TestEvent.channel)
 
 </code></pre>
 				</section>
-
+				<section>
+					<h2>
+						Generic types
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+abstract class Entity
+abstract class EntityQuery&lt;out TEntity&gt; where TEntity: Entity {
+	abstract fun execute(): Collection&lt;TEntity&gt;
+}
+abstract class EntityCommand&lt;in TEntity&gt; where TEntity: Entity {
+	abstract fun execute(entity: TEntity)
+}
+fun &lt;T&gt; emptyCollection(): Collection&lt;T&gt;{
+	return arrayListOf&lt;T&gt;()
+}
+inline fun &lt;reified T&gt; getTypeName(): String{
+	return T::class.java.simpleName
+}	</code></pre>
+				</section>
 				<section>
 					<h2>
 						Lambdas
@@ -653,6 +671,19 @@ strings
 
 				<section>
 					<h2>
+						Collections lambda expressions
+					</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+fruits
+.filter { it.startsWith("a") }
+.sortedBy { it }
+.map { it.toUpperCase() }
+.forEach { println(it) }
+							</code></pre>
+				</section>
+
+				<section>
+					<h2>
 						Higher-Order Functions
 					</h2>
 					A higher-order function is a function that takes functions as parameters, or returns a function
@@ -669,18 +700,7 @@ strings
 					<pre><code class="hljs" data-trim contenteditable>fun toBeSynchronized() = sharedResource.operation()
 val result = lock(lock, { sharedResource.operation() })</code></pre>
 				</section>
-				<section>
-					<h2>
-						Collections lambda expressions
-					</h2>
-					<pre><code class="hljs" data-trim contenteditable>
-fruits
-.filter { it.startsWith("a") }
-.sortedBy { it }
-.map { it.toUpperCase() }
-.forEach { println(it) }
-							</code></pre>
-				</section>
+
 
 				<section>
 					<h2>
@@ -754,25 +774,7 @@ odata.configure {
 val expectedEncoded = "%24select=Id%2CDescription&%24expand=Permission%2CDocuments&%24filter=(IsRepeating%20eq%20True%20and%20RepeatType%20gt%201)%20and%20Notes%20ne%20null&%24top=10&%24skip=1"</code></pre>
 				</section>
 
-				<section>
-					<h2>
-						Generic types
-					</h2>
-					<pre><code class="hljs" data-trim contenteditable>
-abstract class Entity
-abstract class EntityQuery&lt;out TEntity&gt; where TEntity: Entity {
-	abstract fun execute(): Collection&lt;TEntity&gt;
-}
-abstract class EntityCommand&lt;in TEntity&gt; where TEntity: Entity {
-	abstract fun execute(entity: TEntity)
-}
-fun &lt;T&gt; emptyCollection(): Collection&lt;T&gt;{
-	return arrayListOf&lt;T&gt;()
-}
-inline fun &lt;reified T&gt; getTypeName(): String{
-	return T::class.java.simpleName
-}	</code></pre>
-				</section>
+
 			</section>
 
 
